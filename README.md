@@ -286,7 +286,95 @@ curl http://10.110.121.85/
 }
 ```
 
-#### 3.3 Install Exporter for metrics
+#### 3.3 Install NGINX Prometheus Exporter
+Install dependency
+``` Log
+# apt install git -y
+```
+Install go
+``` Log
+# cd /usr/local/src/
+# wget https://go.dev/dl/go1.25.0.linux-amd64.tar.gz
+# tar -zxvf go1.25.0.linux-amd64.tar.gz
+# export PATH=$PATH:/usr/local/src/go/bin
+```
+``` Log
+# go version
+```
+``` Log
+go version go1.25.0 linux/amd64
+```
+Prepare NGINX Prometheus Exporter
+``` Log
+# git clone https://github.com/nginx/nginx-prometheus-exporter.git
+# cd nginx-prometheus-exporter/
+# go build .
+# cp nginx-prometheus-exporter /usr/local/bin
+```
+``` Log
+# vim /etc/systemd/system/nginx_prometheus_exporter.server
+```
+```
+[Unit]
+Description=Prometheus NGINX Exporter
+After=network.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+SyslogIdentifier=nginxprometheusexporter
+ExecStart=/usr/local/bin/nginx-prometheus-exporter --nginx.plus --nginx.scrape-uri=http://127.0.0.1:8080/api -web.listen-address=0.0.0.0:9113
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+# useradd --no-create-home --shell /bin/false prometheus
+# systemctl daemon-reload
+# systemctl enable nginx_prometheus_exporter
+# systemctl start nginx_prometheus_exporter
+# systemctl status nginx_prometheus_exporter
+```
+
+#### 3.4 Install Node Exporter
+```
+# wget https://github.com/prometheus/node_exporter/releases/download/v1.10.2/node_exporter-1.10.2.linux-amd64.tar.gz
+# tar -zxvf node_exporter-1.10.2.linux-amd64.tar.gz
+# mv node_exporter-1.10.2.linux-amd64/node_exporter /usr/local/bin/
+```
+```
+# vim /etc/systemd/system/node_exporter.service
+```
+```
+[Unit]
+Description=Node Exporter 1.10.2
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/local/bin/node_exporter \
+--collector.logind \
+--collector.systemd \
+--collector.processes
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+# systemctl daemon-reload
+# systemctl start node_exporter
+# systemctl enable node_exporter
+# systemctl status node_exporter
+```
 
 ## Monitoring and Visulizaition
 
