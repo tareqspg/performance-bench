@@ -524,10 +524,12 @@ The Dashboard should look like -
 ![NGINX Plus vs Apache](images/nginx_plus_vs_apache.png)
 
 
-## Results
-### NGINX Plus [nginx/1.29.3 (nginx-plus-r36-p1)]
-``` Log
+## Load Generation and Results
+### NGINX Plus
+```
 wrk -t4 -c100 -d300s --latency http://10.110.121.85
+```
+```
 Running 5m test @ http://10.110.121.85
   4 threads and 100 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
@@ -543,9 +545,11 @@ Requests/sec:  23972.00
 Transfer/sec:      7.25MB
 ```
 
-### Apache [2.4.58]
-``` Log
+### Apache HTTP Server
+```
 wrk -t4 -c100 -d300s --latency http://10.110.121.175
+```
+```
 Running 5m test @ http://10.110.121.175
   4 threads and 100 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
