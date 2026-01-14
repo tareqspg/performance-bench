@@ -1,4 +1,4 @@
-# main steps
+cd # main steps
 
 ## Version Matrix
 
@@ -230,6 +230,24 @@ Install NGINX Plus on the dedicated NGINX server.
 To install NGINX Plus, please do refer to the [Official Installation Doc](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-plus/)
 
 #### 3.2 Configure NGINX Plus
+```
+# vim /etc/nginx/conf.d/app.conf
+```
+```
+server {
+    server_name 10.110.121.85; # change IP or domain as per need
+    root /usr/share/nginx/html;
+    index health.json;
+
+    location / {
+        default_type application/json;
+        index health.json;
+        alias /usr/share/nginx/html/;
+    }
+
+}
+```
+
 #### 3.3 Install Exporter for metrics
 
 ## Monitoring and Visulizaition
