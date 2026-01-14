@@ -519,6 +519,9 @@ server {
 Login to Grafana with user: admin and password: admin by browsing http://10.110.121.81/
 ![Grafana Login](images/grafana_login.png)
 
+Import the dashboard provided on dashboards folder named `nginx_plus_vs_apache.json` by clicking on the (+) icon in Grafana.
+The Dashboard should look like -
+![NGINX Plus vs Apache](images/nginx_plus_vs_apache.png)
 
 
 ## Results
