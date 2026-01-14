@@ -246,6 +246,44 @@ server {
     }
 
 }
+
+    server {
+	    listen 8080;
+            server_name 127.0.0.1;
+            location /stub_status { stub_status; }
+            location /api {
+                api write=on;
+                allow 127.0.0.1;
+                deny all;
+            }
+
+    }
+
+```
+```
+# vim /usr/share/nginx/html/health.json
+```
+```
+{
+  "status": "OK",
+  "service": "NGINXWebServer",
+  "version": "1.0.0"
+}
+```
+``` Log
+# nginx -t
+# systemctl reload nginx
+```
+Verify from the NGINX Server or from where the IP is reachable
+``` Log
+curl http://10.110.121.85/
+```
+``` Log
+{
+  "status": "OK",
+  "service": "NGINXWebServer",
+  "version": "1.0.0"
+}
 ```
 
 #### 3.3 Install Exporter for metrics
