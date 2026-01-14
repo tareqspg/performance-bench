@@ -515,6 +515,10 @@ server {
 # systemctl reload nginx
 ```
 
+#### 5.2 Configure Grafana Dashboards
+Login to Grafana with user: admin and password: admin by browsing http://10.110.121.81/
+![Grafana Login](images/grafana_login.png)
+
 
 
 ## Results
