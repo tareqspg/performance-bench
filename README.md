@@ -149,6 +149,42 @@ Install go
 ``` Log
 go version go1.24.0 linux/amd64
 ```
+Prepare Apache Exporter
+``` Log
+# git clone https://github.com/Lusitaniae/apache_exporter.git
+# cd apache_exporter/
+# go build .
+# cp apache_exporter /usr/local/bin
+```
+``` Log
+# vim /etc/systemd/system/apache_exporter.server
+```
+```
+[Unit]
+Description=Apache Exporter
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/local/bin/apache_exporter --scrape_uri="http://localhost/server-status?auto" --web.listen-address=:9117
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+# useradd --no-create-home --shell /bin/false prometheus
+# systemctl daemon-reload
+# systemctl enable apache_exporter
+# systemctl start apache_exporter
+# systemctl status apache_exporter
+```
 
 #### 2.4 Install Node Exporter
 
