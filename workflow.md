@@ -1,5 +1,12 @@
 # main steps
 
+## Version Matrix
+
+| Component | Version | Release |
+|----------|---------|---------------|
+| Operating System | Ubuntu 24.04 LTS Server | - |
+| NGINX Plus | 1.29.3 | nginx-plus-r36-p1 |
+| Apache | 2.4.58 | - |
 
 ### Apache
 install
