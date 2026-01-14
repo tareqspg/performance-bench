@@ -6,7 +6,19 @@
 |----------|---------|---------------|
 | Operating System | Ubuntu 24.04 LTS Server | - |
 | NGINX Plus | 1.29.3 | nginx-plus-r36-p1 |
-| Apache | 2.4.58 | - |
+| Apache2 | 2.4.58 | - |
+| WRK | 4.2.0 | - |
+
+## Server Specification
+
+| server_name | core | ram |
+|----------|---------|---------------|
+| Load_Generator | 8 | 16GiB |
+| NGINX_Plus_Server | 8 | 16GiB |
+| Apache_Server | 8 | 16GiB |
+
+## Deployment Diagram
+![Request Flow](images/diagram.png)
 
 ### Apache
 install
