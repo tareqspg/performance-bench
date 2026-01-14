@@ -566,3 +566,6 @@ Requests/sec:  24924.08
 Transfer/sec:      7.35MB
 ```
 
+### Result Graph
+![Result Graph](images/result_graph.png)
+
