@@ -224,7 +224,13 @@ WantedBy=multi-user.target
 # systemctl status node_exporter
 ```
 
+### 3. NGINX Plus
+Install NGINX Plus on the dedicated NGINX server.
+#### 3.1 Install NGINX Plus
+To install NGINX Plus, please do refer to the [Official Installation Doc](https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-plus/)
 
+#### 3.2 Configure NGINX Plus
+#### 3.3 Install Exporter for metrics
 
 ## Monitoring and Visulizaition
 
