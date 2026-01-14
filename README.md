@@ -475,7 +475,47 @@ WantedBy=multi-user.target
 # systemctl status prometheus
 ```
 
-### Grafana
+### 5. Install and Configure Grafana
+#### 5.1 Grafana Installation
+```
+# apt-get install -y apt-transport-https wget
+# mkdir -p /etc/apt/keyrings/
+# wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+# echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+# apt update
+# apt-get install grafana nginx -y
+# systemctl enable grafana-server
+# systemctl start grafana-server
+# systemctl status grafana-server.service
+```
+```
+# vim /etc/nginx/conf.d/grafana.conf
+```
+```
+upstream grafana {
+	server 127.0.0.1:3000;
+}
+
+server {
+	server_name 10.110.121.81;
+	location  / {
+		proxy_pass  http://grafana;
+		proxy_set_header HOST $host;
+		proxy_set_header  X-Forwarded-Host $host;
+		proxy_set_header  X-Forwarded-Server $host;
+		proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+	}
+}
+```
+```
+# nginx -t
+# systemctl enable nginx
+# systemctl start nginx
+# systemctl status nginx
+# systemctl reload nginx
+```
+
+
 
 ## Results
 ### NGINX Plus [nginx/1.29.3 (nginx-plus-r36-p1)]
