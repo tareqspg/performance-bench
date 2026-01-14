@@ -378,8 +378,102 @@ WantedBy=multi-user.target
 
 ## Monitoring and Visulizaition
 
-### Prometheus
+### 4. Install and Configure Prometheus
+```
+# cd /usr/local/src/
+# wget https://github.com/prometheus/prometheus/releases/download/v3.5.0/prometheus-3.5.0.linux-amd64.tar.gz
+# useradd --no-create-home --shell /bin/false prometheus
+# mkdir -p /etc/prometheus /var/lib/prometheus
+# tar -zxvf prometheus-3.5.0.linux-amd64.tar.gz
+# cd prometheus-3.5.0.linux-amd64/
+# mv prometheus /usr/local/bin/
+# mv promtool /usr/local/bin/
+```
+```
+# vim /etc/prometheus/prometheus.yml
+```
+```
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
 
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+rule_files:
+scrape_configs:
+  - job_name: "prometheus"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: 'basic_system_metrics'
+    static_configs:
+      - targets: ['f5nginxbenchmarknplus:9100','f5nginxbenchmarkapache:9100']
+
+  - job_name: "nginx_monitoring"
+    static_configs:
+      - targets: ["f5nginxbenchmarknplus:9113"]
+
+  - job_name: "apache_monitoring"
+    static_configs:
+      - targets: ["f5nginxbenchmarkapache:9117"]
+```
+```
+# vim /etc/hosts
+```
+```
+10.110.121.81	f5nginxbenchmarkloadgen
+10.110.121.85	f5nginxbenchmarknplus
+10.110.121.175	f5nginxbenchmarkapache
+```
+```
+# chown prometheus:prometheus /var/lib/prometheus/ /usr/local/bin/ /etc/prometheus/ -R 
+```
+```
+# vim /etc/systemd/system/prometheus.service
+```
+```
+[Unit]
+Description=Prometheus 3.50.0
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/local/bin/prometheus \
+--config.file=/etc/prometheus/prometheus.yml \
+--storage.tsdb.path=/var/lib/prometheus \
+--storage.tsdb.retention.time=365d \
+--storage.tsdb.retention.size=20GB \
+--web.console.templates=/etc/prometheus/consoles \
+--web.console.libraries=/etc/prometheus/console_libraries \
+--web.listen-address=0.0.0.0:9090 \
+--web.enable-lifecycle
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+# systemctl daemon-reload
+# systemctl enable prometheus
+# systemctl start prometheus
+# systemctl status prometheus
+```
 
 ### Grafana
 
