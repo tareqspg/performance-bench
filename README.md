@@ -11,11 +11,11 @@
 
 ## Server Specification
 
-| server_name | core | ram |
-|----------|---------|---------------|
-| Load_Generator | 8 | 16GiB |
-| NGINX_Plus_Server | 8 | 16GiB |
-| Apache_Server | 8 | 16GiB |
+| server_name | core | ram | IP |
+|----------|---------|---------------|---------------|
+| Load_Generator | 8 | 16GiB | 10.110.121.81 |
+| NGINX_Plus_Server | 8 | 16GiB | 10.110.121.85 |
+| Apache_Server | 8 | 16GiB | 10.110.121.175 |
 
 ## Deployment Diagram
 ![Request Flow](images/diagram.png)
@@ -60,8 +60,78 @@ Usage: wrk <options> <url>
 ```
 
 ### Apache
-install
-config
+Install and configure Apache HTTP Server on the server dedicated from Apache.
+
+#### Install Apache HTTP Server
+``` Log
+# apt install apache2 -y
+```
+``` Log
+# systemctl start apache2
+```
+``` Log
+# systemctl status apache2
+```
+``` Log
+# systemctl enable apache2
+```
+
+#### Configure Apache HTTP Server
+``` Log
+# vim /etc/apache2/sites-available/app.conf
+```
+``` Log
+<VirtualHost *:80>
+    ServerName 10.110.121.175 # change IP/domain as per need
+
+    DocumentRoot /var/www/html
+
+    <Directory /var/www/html>
+        Options -Indexes
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    # Force JSON content type
+    <Files "health.json">
+        ForceType application/json
+    </Files>
+
+    DirectoryIndex health.json
+
+    ErrorLog  ${APACHE_LOG_DIR}/health_error.log
+    CustomLog ${APACHE_LOG_DIR}/health_access.log combined
+</VirtualHost>
+```
+``` Log
+# vim /var/www/html/health.json
+```
+``` Log
+{
+  "status": "OK",
+  "service": "ApacheWebServer",
+  "version": "1.0.0"
+}
+```
+``` Log
+# rm -f /etc/apache2/sites-available/000-default.conf
+# a2ensite app
+# apachectl configtest
+# systemctl reload apache2
+```
+Verify from the Apache Server or from where the IP is reachable
+``` Log
+curl http://10.110.121.175/
+```
+``` Log
+{
+  "status": "OK",
+  "service": "ApacheWebServer",
+  "version": "1.0.0"
+}
+```
+
+
 exporter
 
 
