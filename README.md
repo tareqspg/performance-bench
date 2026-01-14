@@ -497,7 +497,7 @@ upstream grafana {
 }
 
 server {
-	server_name 10.110.121.81;
+	server_name 10.110.121.81; # change the IP/Domain as per need
 	location  / {
 		proxy_pass  http://grafana;
 		proxy_set_header HOST $host;
