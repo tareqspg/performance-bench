@@ -24,19 +24,19 @@
 
 ### 1. WRK
 Follow the steps to install WRK on Load Generator server.
-#### Dependency installation
+#### 1.1 Dependency installation
 ``` Log
 # apt install -y git build-essential libssl-dev git zip unzip
 ```
 
-#### Clone Repository and make
+#### 1.2 Clone Repository and make
 ``` Log
 # git clone https://github.com/wg/wrk.git
 # cd wrk/
 # make
 ```
 
-#### Copy binary and verify
+#### 1.3 Copy binary and verify
 ``` Log
 # cp wrk /usr/local/bin/
 # wrk --version
@@ -59,10 +59,10 @@ Usage: wrk <options> <url>
   Time arguments may include a time unit (2s, 2m, 2h)
 ```
 
-### Apache
+### 2 Apache
 Install and configure Apache HTTP Server on the server dedicated from Apache.
 
-#### Install Apache HTTP Server
+#### 2.1 Install Apache HTTP Server
 ``` Log
 # apt install apache2 -y
 ```
@@ -76,7 +76,7 @@ Install and configure Apache HTTP Server on the server dedicated from Apache.
 # systemctl enable apache2
 ```
 
-#### Configure Apache HTTP Server
+#### 2.2 Configure Apache HTTP Server
 ``` Log
 # vim /etc/apache2/sites-available/app.conf
 ```
@@ -131,8 +131,27 @@ curl http://10.110.121.175/
 }
 ```
 
+#### 2.3 Install Apache Exporter
+Install dependency
+``` Log
+# apt install git -y
+```
+Install go
+``` Log
+# cd /usr/local/src/
+# wget https://go.dev/dl/go1.24.0.linux-amd64.tar.gz
+# tar -zxvf go1.24.0.linux-amd64.tar.gz
+# export PATH=$PATH:/usr/local/src/go/bin
+```
+``` Log
+# go version
+```
+``` Log
+go version go1.24.0 linux/amd64
+```
 
-exporter
+#### 2.4 Install Node Exporter
+
 
 
 ## Monitoring and Visulizaition
