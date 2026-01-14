@@ -187,6 +187,42 @@ WantedBy=multi-user.target
 ```
 
 #### 2.4 Install Node Exporter
+```
+# wget https://github.com/prometheus/node_exporter/releases/download/v1.10.2/node_exporter-1.10.2.linux-amd64.tar.gz
+# tar -zxvf node_exporter-1.10.2.linux-amd64.tar.gz
+# mv node_exporter-1.10.2.linux-amd64/node_exporter /usr/local/bin/
+```
+```
+# vim /etc/systemd/system/node_exporter.service
+```
+```
+[Unit]
+Description=Node Exporter 1.10.2
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+Restart=on-failure
+RestartSec=5s
+ExecStart=/usr/local/bin/node_exporter \
+--collector.logind \
+--collector.systemd \
+--collector.processes
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+# systemctl daemon-reload
+# systemctl start node_exporter
+# systemctl enable node_exporter
+# systemctl status node_exporter
+```
 
 
 
