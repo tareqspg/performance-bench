@@ -20,6 +20,45 @@
 ## Deployment Diagram
 ![Request Flow](images/diagram.png)
 
+## Installation 
+
+### 1. WRK
+Follow the steps to install WRK on Load Generator server.
+#### Dependency installation
+``` Log
+# apt install -y git build-essential libssl-dev git zip unzip
+```
+
+#### Clone Repository and make
+``` Log
+# git clone https://github.com/wg/wrk.git
+# cd wrk/
+# make
+```
+
+#### Copy binary and verify
+``` Log
+# cp wrk /usr/local/bin/
+# wrk --version
+```
+``` Log
+wrk 4.2.0 [epoll] Copyright (C) 2012 Will Glozer
+Usage: wrk <options> <url>                            
+  Options:                                            
+    -c, --connections <N>  Connections to keep open   
+    -d, --duration    <T>  Duration of test           
+    -t, --threads     <N>  Number of threads to use   
+                                                      
+    -s, --script      <S>  Load Lua script file       
+    -H, --header      <H>  Add header to request      
+        --latency          Print latency statistics   
+        --timeout     <T>  Socket/request timeout     
+    -v, --version          Print version details      
+                                                      
+  Numeric arguments may include a SI unit (1k, 1M, 1G)
+  Time arguments may include a time unit (2s, 2m, 2h)
+```
+
 ### Apache
 install
 config
